@@ -1,13 +1,15 @@
 # Simple Canvas Progress Bar
 Simple canvas progress bar for smooth progress bar animations
 
+# <img src="https://github.com/charlesbodman/simple-canvas-progress-bar/blob/master/progressbar.gif" width="487"/>
+
 ## Installation
 ```sh
 npm install simple-canvas-progress-bar --save
 ```
 ## Usage
-### Javascript
-```javascript
+###
+```typescript
 import SimpleCanvasProgressBar from 'simple-canvas-progress-bar';
 
 const canvasProgressBar = new SimpleCanvasProgressBar();
@@ -25,4 +27,14 @@ canvasProgressBar.animate({
     speed: 1000, // Speed it takes from 0 to 100
     stripeSpeed: 100 // Speed the stripes animate at. (PX per second)
 });
+
+
+// Get canvas element to add to the dom
+const canvasEl = canvasProgressBar.getCanvas();
+
+// Example
+var app = document.getElementById("app");
+if (app !== null) {
+    app.appendChild(canvasProgressBar.getCanvas());
+}
 ```
