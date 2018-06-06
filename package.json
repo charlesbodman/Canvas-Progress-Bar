@@ -1,5 +1,5 @@
 {
-  "name": "canvas-progress-bar",
+  "name": "simple-canvas-progress-bar",
   "version": "1.0.0",
   "description": "Simple canvas progress bar",
   "main": "index.js",

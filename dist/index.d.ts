@@ -2,16 +2,6 @@
  * This class handles drawing of progress bar
  * @author Charles Bodman
  *
- * @example
- * const canvasProgressBar = new CanvasProgressBar();
- * canvasProgressBar.setSize(450, 25);
- * canvasProgressBar.setBarColors(['#94f407', '#36a804']);
- * canvasProgressBar.animate({
- *   from: 20,
- *   to: 100,
- *   speed: 1000
- * });
- *
  */
 declare class CanvasProgressBar {
     /**
@@ -26,6 +16,10 @@ declare class CanvasProgressBar {
      * Progress bar color
      */
     private barColor;
+    /**
+     * Progress bar line color
+     */
+    private stripeColor;
     /**
      * Flag for whether canvas bar is animating or not
      */
@@ -43,6 +37,9 @@ declare class CanvasProgressBar {
      * Last animation timestamp
      */
     private lastAnimationTimeStamp;
+    /**
+     * The contructor of the canvas progress bar creates it's on canvas reference.
+     */
     constructor();
     /**
      * Sets the size of the canvas element
@@ -63,16 +60,21 @@ declare class CanvasProgressBar {
      * Animates the progress bar
      * @param {CanvasProgressBarAnimationOptions} options
      */
-    animate(options: CanvasProgressBarAnimationOptions): void;
+    animate(options: Partial<CanvasProgressBarAnimationOptions>): void;
+    /**
+     * Stops the animation loop
+     */
+    stopAnimation(): void;
     /**
      * Animate the progress bar
      */
     private loop;
     /**
      * Set Bar Color
-     * @param color
+     * @param {String[]} colors
+     * Setting multiple colours will create a simple top down linear gradient
      */
-    setBarColors(colors: string[]): void;
+    setColors(colorOptions: CanvasProgressBarColorOptions): void;
     /**
      * Creates a canvas linear gradient
      * @param {String[]} colors
@@ -89,7 +91,7 @@ declare class CanvasProgressBar {
     private drawOverlayLines;
 }
 /**
- * Canvas progress bar animation options type
+ * Options for animatiing
  * This is used in the {CanvasProgressBar} animate method
  */
 declare type CanvasProgressBarAnimationOptions = {
@@ -105,6 +107,30 @@ declare type CanvasProgressBarAnimationOptions = {
      * Animations speed from 0 to 100 in ms
      */
     speed: number;
+    /**
+     * Animation speed of the line movement
+     */
+    stripeSpeed: number;
+};
+declare type CanvasProgressBarOverlayOptions = {
+    /**
+     * Number of stripes across the progress bar
+     */
+    stripeCount: number;
+    /**
+     * Thickness of the stripes across the progress bar
+     */
+    stripeThickness: number;
+};
+declare type CanvasProgressBarColorOptions = {
+    /**
+     * Bar colors. If multiple colors are provided, they will be drawn in a simple top down linear gradient
+     */
+    bar: string[];
+    /**
+     * Line color
+     */
+    stripes?: string;
 };
 declare const canvasProgressBar: CanvasProgressBar;
 declare const app: HTMLElement | null;

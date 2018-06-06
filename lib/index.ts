@@ -3,16 +3,6 @@
  * This class handles drawing of progress bar
  * @author Charles Bodman
  *
- * @example
- * const canvasProgressBar = new CanvasProgressBar();
- * canvasProgressBar.setSize(450, 25);
- * canvasProgressBar.setBarColors(['#94f407', '#36a804']);
- * canvasProgressBar.animate({
- *   from: 20,
- *   to: 100,
- *   speed: 1000
- * });
- *
  */
 class CanvasProgressBar
 {
@@ -29,52 +19,47 @@ class CanvasProgressBar
     /**
      * Progress bar color
      */
-    private barColor: string | CanvasGradient;
+    private barColor: string | CanvasGradient = '#00FF00';
+
+    /**
+     * Progress bar line color
+     */
+    private stripeColor: string = 'rgba(255,255,255,0.3)';
 
     /**
      * Flag for whether canvas bar is animating or not
      */
-    private animating: boolean;
+    private animating: boolean = false;
 
     /**
      * Animation Options
      * @type {CanvasProgressBarAnimationOptions}
      */
-    private animationOptions: CanvasProgressBarAnimationOptions;
+    private animationOptions: CanvasProgressBarAnimationOptions = {
+        from:0,
+        to:100,
+        speed:1000,
+        stripeSpeed: 1
+    };
 
     /**
      * Animation percent progress elapsed
      */
-    private animationPercentElapsed: number;
+    private animationPercentElapsed: number = 0;
 
     /**
      * Last animation timestamp
      */
-    private lastAnimationTimeStamp: number;
+    private lastAnimationTimeStamp: number = 0;
 
-
+    /**
+     * The contructor of the canvas progress bar creates it's on canvas reference.
+     */
     constructor()
     {
-        // Create canvas element
         const canvas = document.createElement('canvas');
         this.canvas = canvas;
         this.canvasCtx = canvas.getContext('2d');
-
-        this.barColor = '#00FF00';
-
-        this.animating = false;
-
-        this.animationOptions = {
-            from:0,
-            to:100,
-            speed:1000
-        };
-
-        this.animationPercentElapsed = 0;
-
-        this.lastAnimationTimeStamp = Date.now();
-
-        this.loop = this.loop.bind(this);
     }
 
     /**
@@ -110,9 +95,9 @@ class CanvasProgressBar
      * Animates the progress bar
      * @param {CanvasProgressBarAnimationOptions} options
      */
-    public animate(options: CanvasProgressBarAnimationOptions)
+    public animate(options: Partial<CanvasProgressBarAnimationOptions>)
     {
-        this.animationOptions = options;
+        this.animationOptions = {...this.animationOptions, ...options};
         this.animationPercentElapsed = 0;
         this.animating = true;
         this.lastAnimationTimeStamp = Date.now();
@@ -120,34 +105,61 @@ class CanvasProgressBar
     }
 
     /**
+     * Stops the animation loop
+     */
+    public stopAnimation()
+    {
+        this.animating = false;
+    }
+
+    /**
      * Animate the progress bar
      */
-    private loop()
+    private loop = () =>
     {
-        const currentTime = Date.now();
-        const delta = currentTime - this.lastAnimationTimeStamp;
-        const animationOptions = this.animationOptions;
-        const progressPercent = (((animationOptions.from / 100) + this.animationPercentElapsed));
+        if( this.animating )
+        {
+            const currentTime = Date.now();
+            const delta = currentTime - this.lastAnimationTimeStamp;
+            const animationOptions = this.animationOptions;
+            const progressPercent = (((animationOptions.from / 100) + this.animationPercentElapsed));
 
-        this.draw(progressPercent);
-        this.animationPercentElapsed += (((100 / animationOptions.speed) * delta) / 100);
-        this.lastAnimationTimeStamp = currentTime;
-        window.requestAnimationFrame(this.loop);
+            this.draw(progressPercent);
+
+            if( progressPercent < (animationOptions.to/100) )
+            {
+                this.animationPercentElapsed += (((100 / animationOptions.speed) * delta) / 100);
+            }
+
+            this.lastAnimationTimeStamp = currentTime;
+            window.requestAnimationFrame(this.loop);
+        }
     }
 
     /**
      * Set Bar Color
-     * @param color
+     * @param {String[]} colors
+     * Setting multiple colours will create a simple top down linear gradient
      */
-    public setBarColors(colors: string[])
+    public setColors(colorOptions: CanvasProgressBarColorOptions)
     {
-        if (colors.length === 1)
+        if ( colorOptions.bar )
         {
-            this.barColor = colors[0];
+            const barColor = colorOptions.bar;
+
+            if (colorOptions.bar.length === 1)
+            {
+                this.barColor = barColor[0];
+            }
+            else
+            {
+                this.barColor = this.createLinearGradient(barColor);
+            }
         }
-        else
+
+        if( colorOptions.stripes )
         {
-            this.barColor = this.createLinearGradient(colors);
+            this.stripeColor = colorOptions.stripes;
         }
     }
 
@@ -162,7 +174,7 @@ class CanvasProgressBar
         const height = canvas.height;
         const colorsCount = colors.length;
 
-        if(this.canvasCtx === null)
+        if (this.canvasCtx === null)
         {
             throw new Error('Canvas context is null');
         }
@@ -207,8 +219,10 @@ class CanvasProgressBar
             canvasCtx.fillStyle = this.barColor;
             canvasCtx.fillRect(0, 0, width, height);
 
-            this.drawOverlayLines();
+            // Draw overlay lines -> / / / /
+            this.drawStripes();
 
+            // Restore context
             canvasCtx.restore();
         }
     }
@@ -216,7 +230,7 @@ class CanvasProgressBar
     /**
      * Draws overlay lines
      */
-    private drawOverlayLines()
+    private drawStripes()
     {
         const canvas = this.canvas;
         const canvasCtx = this.canvasCtx;
@@ -224,18 +238,18 @@ class CanvasProgressBar
         const height = canvas.height;
 
         const overlayLines = 5;
-        const spread = width / overlayLines;
         const lineWidth = 30;
+        const spread = width / overlayLines;
 
-        if( canvasCtx !== null )
+        if (canvasCtx !== null)
         {
             canvasCtx.beginPath();
 
             const overlayAnimationOffset = -(Date.now() / 10) % spread;
-            for (let i = -2; i <= overlayLines; i++)
+            for (let i = 0; i <= overlayLines; i++)
             {
                 const offset = (i * spread) + (overlayAnimationOffset);
-                canvasCtx.strokeStyle = 'rgba(255,255,255,0.5)';
+                canvasCtx.strokeStyle = this.stripeColor;
                 canvasCtx.lineWidth = lineWidth;
                 canvasCtx.moveTo(0 + offset - lineWidth, height + lineWidth);
                 canvasCtx.lineTo(spread + offset + lineWidth, -lineWidth);
@@ -248,9 +262,8 @@ class CanvasProgressBar
 
 }
 
-
 /**
- * Canvas progress bar animation options type
+ * Options for animatiing
  * This is used in the {CanvasProgressBar} animate method
  */
 type CanvasProgressBarAnimationOptions = {
@@ -268,24 +281,36 @@ type CanvasProgressBarAnimationOptions = {
      * Animations speed from 0 to 100 in ms
      */
     speed: number;
+
+    /**
+     * Animation speed of the line movement
+     */
+    stripeSpeed: number;
 }
 
+type CanvasProgressBarOverlayOptions = {
 
+    /**
+     * Number of stripes across the progress bar
+     */
+    stripeCount: number;
 
+    /**
+     * Thickness of the stripes across the progress bar
+     */
+    stripeThickness: number;
 
-
-const canvasProgressBar = new CanvasProgressBar();
-canvasProgressBar.setSize(450, 25);
-canvasProgressBar.setBarColors(['#94f407', '#36a804']);
-canvasProgressBar.animate({
-    from: 20,
-    to: 100,
-    speed: 1000
-});
-
-const app = document.getElementById("app");
-if( app !== null )
-{
-    app.appendChild(canvasProgressBar.getCanvas());
 }
 
+type CanvasProgressBarColorOptions = {
+
+    /**
+     * Bar colors. If multiple colors are provided, they will be drawn in a simple top down linear gradient
+     */
+    bar: string[],
+
+    /**
+     * Line color
+     */
+    stripes?: string;
+}

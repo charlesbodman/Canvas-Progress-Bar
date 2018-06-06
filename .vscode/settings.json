@@ -1,5 +1,8 @@
 {
     "typescript.format.enable": true,
     "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
-    "typescript.format.placeOpenBraceOnNewLineForFunctions": true
+    "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+    "editor.rulers": [
+        120
+    ]
 }
