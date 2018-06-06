@@ -38,7 +38,7 @@ var CanvasProgressBar = /** @class */ (function () {
             from: 0,
             to: 100,
             speed: 1000,
-            stripeSpeed: 1
+            stripeSpeed: 100
         };
         /**
          * Animation percent progress elapsed
@@ -58,7 +58,6 @@ var CanvasProgressBar = /** @class */ (function () {
                 var animationOptions = _this.animationOptions;
                 var progressPercent = (((animationOptions.from / 100) + _this.animationPercentElapsed));
                 _this.draw(progressPercent);
-                console.log(progressPercent);
                 if (progressPercent < (animationOptions.to / 100)) {
                     _this.animationPercentElapsed += (((100 / animationOptions.speed) * delta) / 100);
                 }
@@ -171,7 +170,7 @@ var CanvasProgressBar = /** @class */ (function () {
             canvasCtx.fillStyle = this.barColor;
             canvasCtx.fillRect(0, 0, width, height);
             // Draw overlay lines -> / / / /
-            this.drawOverlayLines();
+            this.drawStripes();
             // Restore context
             canvasCtx.restore();
         }
@@ -179,7 +178,7 @@ var CanvasProgressBar = /** @class */ (function () {
     /**
      * Draws overlay lines
      */
-    CanvasProgressBar.prototype.drawOverlayLines = function () {
+    CanvasProgressBar.prototype.drawStripes = function () {
         var canvas = this.canvas;
         var canvasCtx = this.canvasCtx;
         var width = canvas.width;
@@ -189,7 +188,8 @@ var CanvasProgressBar = /** @class */ (function () {
         var spread = width / overlayLines;
         if (canvasCtx !== null) {
             canvasCtx.beginPath();
-            var overlayAnimationOffset = -(Date.now() / 10) % spread;
+            var stripeSpeed = (Date.now() / 1000) * this.animationOptions.stripeSpeed;
+            var overlayAnimationOffset = -(stripeSpeed) % spread;
             for (var i = 0; i <= overlayLines; i++) {
                 var offset = (i * spread) + (overlayAnimationOffset);
                 canvasCtx.strokeStyle = this.stripeColor;
@@ -202,18 +202,3 @@ var CanvasProgressBar = /** @class */ (function () {
     };
     return CanvasProgressBar;
 }());
-var canvasProgressBar = new CanvasProgressBar();
-canvasProgressBar.setSize(450, 25);
-canvasProgressBar.setColors({ bar: ['#94f407', '#36a804'] });
-canvasProgressBar.animate({
-    from: 20,
-    to: 100,
-    speed: 1000
-});
-setTimeout(function () {
-    canvasProgressBar.stopAnimation();
-}, 500);
-var app = document.getElementById("app");
-if (app !== null) {
-    app.appendChild(canvasProgressBar.getCanvas());
-}

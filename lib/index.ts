@@ -1,10 +1,10 @@
 
 /**
- * This class handles drawing of progress bar
+ * Simple progress bar for smooth progress bar animations
  * @author Charles Bodman
  *
  */
-class CanvasProgressBar
+class SimpleCanvasProgressBar
 {
     /**
      * Progress bar canvas element
@@ -33,13 +33,13 @@ class CanvasProgressBar
 
     /**
      * Animation Options
-     * @type {CanvasProgressBarAnimationOptions}
+     * @type {SimpleCanvasProgressBarAnimationOptions}
      */
-    private animationOptions: CanvasProgressBarAnimationOptions = {
+    private animationOptions: SimpleCanvasProgressBarAnimationOptions = {
         from:0,
         to:100,
         speed:1000,
-        stripeSpeed: 1
+        stripeSpeed: 100
     };
 
     /**
@@ -93,9 +93,9 @@ class CanvasProgressBar
 
     /**
      * Animates the progress bar
-     * @param {CanvasProgressBarAnimationOptions} options
+     * @param {SimpleCanvasProgressBarAnimationOptions} options
      */
-    public animate(options: Partial<CanvasProgressBarAnimationOptions>)
+    public animate(options: Partial<SimpleCanvasProgressBarAnimationOptions>)
     {
         this.animationOptions = {...this.animationOptions, ...options};
         this.animationPercentElapsed = 0;
@@ -141,7 +141,7 @@ class CanvasProgressBar
      * @param {String[]} colors
      * Setting multiple colours will create a simple top down linear gradient
      */
-    public setColors(colorOptions: CanvasProgressBarColorOptions)
+    public setColors(colorOptions: SimpleCanvasProgressBarColorOptions)
     {
         if ( colorOptions.bar )
         {
@@ -245,7 +245,8 @@ class CanvasProgressBar
         {
             canvasCtx.beginPath();
 
-            const overlayAnimationOffset = -(Date.now() / 10) % spread;
+            const stripeSpeed = (Date.now() / 1000) * this.animationOptions.stripeSpeed;
+            const overlayAnimationOffset = -(stripeSpeed) % spread;
             for (let i = 0; i <= overlayLines; i++)
             {
                 const offset = (i * spread) + (overlayAnimationOffset);
@@ -264,9 +265,9 @@ class CanvasProgressBar
 
 /**
  * Options for animatiing
- * This is used in the {CanvasProgressBar} animate method
+ * This is used in the {SimpleCanvasProgressBar} animate method
  */
-type CanvasProgressBarAnimationOptions = {
+type SimpleCanvasProgressBarAnimationOptions = {
     /**
      * Animation from bar percent
      */
@@ -283,12 +284,12 @@ type CanvasProgressBarAnimationOptions = {
     speed: number;
 
     /**
-     * Animation speed of the line movement
+     * Animation speed of the line movement (PX per second)
      */
     stripeSpeed: number;
 }
 
-type CanvasProgressBarOverlayOptions = {
+type SimpleCanvasProgressBarOverlayOptions = {
 
     /**
      * Number of stripes across the progress bar
@@ -302,7 +303,7 @@ type CanvasProgressBarOverlayOptions = {
 
 }
 
-type CanvasProgressBarColorOptions = {
+type SimpleCanvasProgressBarColorOptions = {
 
     /**
      * Bar colors. If multiple colors are provided, they will be drawn in a simple top down linear gradient
@@ -314,3 +315,5 @@ type CanvasProgressBarColorOptions = {
      */
     stripes?: string;
 }
+
+export default SimpleCanvasProgressBar;

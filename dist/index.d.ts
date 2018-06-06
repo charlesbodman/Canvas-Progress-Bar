@@ -88,7 +88,7 @@ declare class CanvasProgressBar {
     /**
      * Draws overlay lines
      */
-    private drawOverlayLines;
+    private drawStripes;
 }
 /**
  * Options for animatiing
@@ -108,7 +108,7 @@ declare type CanvasProgressBarAnimationOptions = {
      */
     speed: number;
     /**
-     * Animation speed of the line movement
+     * Animation speed of the line movement (PX per second)
      */
     stripeSpeed: number;
 };
@@ -132,5 +132,3 @@ declare type CanvasProgressBarColorOptions = {
      */
     stripes?: string;
 };
-declare const canvasProgressBar: CanvasProgressBar;
-declare const app: HTMLElement | null;
