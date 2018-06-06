@@ -1,0 +1,23 @@
+{
+  "name": "canvas-progress-bar",
+  "version": "1.0.0",
+  "description": "Simple canvas progress bar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charlesbodman/Canvas-Progress-Bar.git"
+  },
+  "author": "“Charles <charlesbodman@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charlesbodman/Canvas-Progress-Bar/issues"
+  },
+  "homepage": "https://github.com/charlesbodman/Canvas-Progress-Bar#readme",
+  "devDependencies": {
+    "typescript": "^2.9.1"
+  }
+}
