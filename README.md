@@ -8,8 +8,8 @@ Simple canvas progress bar for smooth progress bar animations
 npm install simple-canvas-progress-bar --save
 ```
 ## Usage
-### Javascript
-```javascript
+###
+```typescript
 import SimpleCanvasProgressBar from 'simple-canvas-progress-bar';
 
 const canvasProgressBar = new SimpleCanvasProgressBar();
