@@ -1,9 +1,9 @@
 /**
- * This class handles drawing of progress bar
+ * Simple progress bar for smooth progress bar animations
  * @author Charles Bodman
  *
  */
-declare class CanvasProgressBar {
+declare class SimpleCanvasProgressBar {
     /**
      * Progress bar canvas element
      */
@@ -26,7 +26,7 @@ declare class CanvasProgressBar {
     private animating;
     /**
      * Animation Options
-     * @type {CanvasProgressBarAnimationOptions}
+     * @type {SimpleCanvasProgressBarAnimationOptions}
      */
     private animationOptions;
     /**
@@ -58,9 +58,9 @@ declare class CanvasProgressBar {
     draw(percent: number): void;
     /**
      * Animates the progress bar
-     * @param {CanvasProgressBarAnimationOptions} options
+     * @param {SimpleCanvasProgressBarAnimationOptions} options
      */
-    animate(options: Partial<CanvasProgressBarAnimationOptions>): void;
+    animate(options: Partial<SimpleCanvasProgressBarAnimationOptions>): void;
     /**
      * Stops the animation loop
      */
@@ -74,7 +74,7 @@ declare class CanvasProgressBar {
      * @param {String[]} colors
      * Setting multiple colours will create a simple top down linear gradient
      */
-    setColors(colorOptions: CanvasProgressBarColorOptions): void;
+    setColors(colorOptions: SimpleCanvasProgressBarColorOptions): void;
     /**
      * Creates a canvas linear gradient
      * @param {String[]} colors
@@ -92,9 +92,9 @@ declare class CanvasProgressBar {
 }
 /**
  * Options for animatiing
- * This is used in the {CanvasProgressBar} animate method
+ * This is used in the {SimpleCanvasProgressBar} animate method
  */
-declare type CanvasProgressBarAnimationOptions = {
+declare type SimpleCanvasProgressBarAnimationOptions = {
     /**
      * Animation from bar percent
      */
@@ -112,17 +112,7 @@ declare type CanvasProgressBarAnimationOptions = {
      */
     stripeSpeed: number;
 };
-declare type CanvasProgressBarOverlayOptions = {
-    /**
-     * Number of stripes across the progress bar
-     */
-    stripeCount: number;
-    /**
-     * Thickness of the stripes across the progress bar
-     */
-    stripeThickness: number;
-};
-declare type CanvasProgressBarColorOptions = {
+declare type SimpleCanvasProgressBarColorOptions = {
     /**
      * Bar colors. If multiple colors are provided, they will be drawn in a simple top down linear gradient
      */
@@ -132,3 +122,4 @@ declare type CanvasProgressBarColorOptions = {
      */
     stripes?: string;
 };
+export default SimpleCanvasProgressBar;

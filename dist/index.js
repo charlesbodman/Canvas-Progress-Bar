@@ -7,16 +7,17 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * This class handles drawing of progress bar
+ * Simple progress bar for smooth progress bar animations
  * @author Charles Bodman
  *
  */
-var CanvasProgressBar = /** @class */ (function () {
+var SimpleCanvasProgressBar = /** @class */ (function () {
     /**
      * The contructor of the canvas progress bar creates it's on canvas reference.
      */
-    function CanvasProgressBar() {
+    function SimpleCanvasProgressBar() {
         var _this = this;
         /**
          * Progress bar color
@@ -32,7 +33,7 @@ var CanvasProgressBar = /** @class */ (function () {
         this.animating = false;
         /**
          * Animation Options
-         * @type {CanvasProgressBarAnimationOptions}
+         * @type {SimpleCanvasProgressBarAnimationOptions}
          */
         this.animationOptions = {
             from: 0,
@@ -74,7 +75,7 @@ var CanvasProgressBar = /** @class */ (function () {
      * @param {Number} width
      * @param {Numbers} height
      */
-    CanvasProgressBar.prototype.setSize = function (width, height) {
+    SimpleCanvasProgressBar.prototype.setSize = function (width, height) {
         var canvas = this.canvas;
         canvas.width = width;
         canvas.height = height;
@@ -83,20 +84,20 @@ var CanvasProgressBar = /** @class */ (function () {
      * Returns the canvas
      * @returns {HTMLCanvasElement}
      */
-    CanvasProgressBar.prototype.getCanvas = function () {
+    SimpleCanvasProgressBar.prototype.getCanvas = function () {
         return this.canvas;
     };
     /**
     * Starts the drawing process
     */
-    CanvasProgressBar.prototype.draw = function (percent) {
+    SimpleCanvasProgressBar.prototype.draw = function (percent) {
         this.drawProgressBar(percent);
     };
     /**
      * Animates the progress bar
-     * @param {CanvasProgressBarAnimationOptions} options
+     * @param {SimpleCanvasProgressBarAnimationOptions} options
      */
-    CanvasProgressBar.prototype.animate = function (options) {
+    SimpleCanvasProgressBar.prototype.animate = function (options) {
         this.animationOptions = __assign({}, this.animationOptions, options);
         this.animationPercentElapsed = 0;
         this.animating = true;
@@ -106,7 +107,7 @@ var CanvasProgressBar = /** @class */ (function () {
     /**
      * Stops the animation loop
      */
-    CanvasProgressBar.prototype.stopAnimation = function () {
+    SimpleCanvasProgressBar.prototype.stopAnimation = function () {
         this.animating = false;
     };
     /**
@@ -114,7 +115,7 @@ var CanvasProgressBar = /** @class */ (function () {
      * @param {String[]} colors
      * Setting multiple colours will create a simple top down linear gradient
      */
-    CanvasProgressBar.prototype.setColors = function (colorOptions) {
+    SimpleCanvasProgressBar.prototype.setColors = function (colorOptions) {
         if (colorOptions.bar) {
             var barColor = colorOptions.bar;
             if (colorOptions.bar.length === 1) {
@@ -132,7 +133,7 @@ var CanvasProgressBar = /** @class */ (function () {
      * Creates a canvas linear gradient
      * @param {String[]} colors
      */
-    CanvasProgressBar.prototype.createLinearGradient = function (colors) {
+    SimpleCanvasProgressBar.prototype.createLinearGradient = function (colors) {
         var canvas = this.canvas;
         var width = canvas.width;
         var height = canvas.height;
@@ -150,7 +151,7 @@ var CanvasProgressBar = /** @class */ (function () {
      * Draws the progress bar
      * @param {Number} progress
      */
-    CanvasProgressBar.prototype.drawProgressBar = function (progress) {
+    SimpleCanvasProgressBar.prototype.drawProgressBar = function (progress) {
         var canvasCtx = this.canvasCtx;
         var canvas = this.canvas;
         var width = canvas.width;
@@ -178,7 +179,7 @@ var CanvasProgressBar = /** @class */ (function () {
     /**
      * Draws overlay lines
      */
-    CanvasProgressBar.prototype.drawStripes = function () {
+    SimpleCanvasProgressBar.prototype.drawStripes = function () {
         var canvas = this.canvas;
         var canvasCtx = this.canvasCtx;
         var width = canvas.width;
@@ -200,5 +201,6 @@ var CanvasProgressBar = /** @class */ (function () {
             canvasCtx.stroke();
         }
     };
-    return CanvasProgressBar;
+    return SimpleCanvasProgressBar;
 }());
+exports.default = SimpleCanvasProgressBar;
